@@ -1,7 +1,10 @@
+import java.awt.Color;
 import java.awt.Graphics;
 
-public class DShape {
-	private DShapeModel shapeModel;
+public abstract class DShape {
+	
+	
+	public abstract Color getColor();
 	
 	/*
 	 * draw method

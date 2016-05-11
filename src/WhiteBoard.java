@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
@@ -10,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class WhiteBoard extends JFrame implements ModelListener {
 	final static String title = "WhiteBoard";
+	private Canvas canvas;
 	private Mode whiteBoardMode;
 	
 	
@@ -39,6 +42,27 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			ovalButton = new JButton("Oval");
 			lineButton = new JButton("Line");
 			textButton = new JButton("Text");
+			
+			//Add button listener for add Rect Button
+			rectButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					DRect rect = new DRect();
+					DRectModel model = new DRectModel();
+					model.setX(10);
+					model.setY(10);
+					model.setWidth(30);
+					model.setHeight(30);
+					model.setColor(Color.RED);
+					
+					canvas.addShape(rect);
+					
+				}
+				
+				
+			});
 			
 			shapeButtons = new ArrayList<>(Arrays.asList(rectButton, ovalButton, lineButton, textButton));
 			
@@ -115,7 +139,9 @@ public class WhiteBoard extends JFrame implements ModelListener {
 	public void displayGui(){
 		JFrame theFrame = new JFrame(title);
 		theFrame.setLayout(new BorderLayout());
-		theFrame.add(new Canvas(), BorderLayout.CENTER);
+		Canvas canvas = new Canvas();
+		this.canvas = canvas;
+		theFrame.add(canvas, BorderLayout.CENTER);
 		theFrame.add(new ControlPanel(), BorderLayout.WEST);
 		theFrame.setVisible(true);
 		theFrame.pack();

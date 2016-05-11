@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class DOval extends DShape {
@@ -7,5 +8,11 @@ public class DOval extends DShape {
 	@Override
 	public void draw(Graphics g){
 		// TODO: Implement shape specific draw g.filletc..
+	}
+
+	@Override
+	public Color getColor() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
