@@ -10,11 +10,26 @@ import javax.swing.table.DefaultTableModel;
 
 public class WhiteBoard extends JFrame implements ModelListener {
 	final static String title = "WhiteBoard";
+	private Mode whiteBoardMode;
+	
 	
 	class ControlPanel extends JPanel{
 		ControlPanel(){
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			
+			//Add networkingPanel
+			JPanel networkingPanel = new JPanel();
+			JButton serverStartButton, clientStartButton;
+			JLabel networkStatus = new JLabel("Status: Normal");
+			serverStartButton = new JButton("Start Server");
+			clientStartButton = new JButton("Start Client");
+			networkingPanel.add(serverStartButton);
+			networkingPanel.add(clientStartButton);
+			networkingPanel.add(networkStatus);
+			this.add(networkingPanel);
+			
+			//Add addShapePanel
 			JPanel addShapePanel = new JPanel();
 			JLabel addLabel = new JLabel("Add");
 			JButton rectButton, ovalButton, lineButton, textButton;
@@ -76,6 +91,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JScrollPane scrollPane = new JScrollPane(table);
 			this.add(scrollPane);
 			
+			
 			//Add Save and Open Buttons Panel
 			JPanel filePanel = new JPanel();
 			JButton saveButton, openButton;
@@ -91,6 +107,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 	
 	
 	public WhiteBoard(){
+		this.whiteBoardMode = Mode.NORMAL;
 		displayGui();
 	}
 	
