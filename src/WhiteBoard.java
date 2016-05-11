@@ -19,7 +19,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JLabel addLabel = new JLabel("Add");
 			JButton rectButton, ovalButton, lineButton, textButton;
 			List<JButton> shapeButtons; 
-	
+			
 			rectButton = new JButton("Rect");
 			ovalButton = new JButton("Oval");
 			lineButton = new JButton("Line");
@@ -27,12 +27,10 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			
 			shapeButtons = new ArrayList<>(Arrays.asList(rectButton, ovalButton, lineButton, textButton));
 			
-			
 			addShapePanel.add(addLabel);
 			for(JButton b: shapeButtons){
 				addShapePanel.add(b);
 			}
-		
 			this.add(addShapePanel);
 		
 			
@@ -64,6 +62,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			
 			this.add(shapeOperationsPanel);
 			
+			
 			//Add JTable Panel
 			// Creates a default table model so that we can add columns and rows
 			DefaultTableModel tableModel = new DefaultTableModel();
@@ -76,6 +75,16 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			// Have to add it to a JScrollPane or else it won't appear
 			JScrollPane scrollPane = new JScrollPane(table);
 			this.add(scrollPane);
+			
+			//Add Save and Open Buttons Panel
+			JPanel filePanel = new JPanel();
+			JButton saveButton, openButton;
+			saveButton = new JButton("Save");
+			openButton = new JButton("Open");
+			filePanel.add(openButton);
+			filePanel.add(saveButton);
+			this.add(filePanel);
+			
 
 		}
 	}
@@ -111,7 +120,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		}catch(Exception ignored){
-			
 		}
 		WhiteBoard obj = new WhiteBoard();
 	}
