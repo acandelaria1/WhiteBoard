@@ -6,12 +6,14 @@ import javax.swing.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 public class WhiteBoard extends JFrame implements ModelListener {
 	final static String title = "WhiteBoard";
 	
 	class ControlPanel extends JPanel{
 		ControlPanel(){
+			
 			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			JPanel addShapePanel = new JPanel();
 			JLabel addLabel = new JLabel("Add");
@@ -62,9 +64,19 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			
 			this.add(shapeOperationsPanel);
 			
-			
-			
 			//Add JTable Panel
+			// Creates a default table model so that we can add columns and rows
+			DefaultTableModel tableModel = new DefaultTableModel();
+			tableModel.addColumn("X");
+			tableModel.addColumn("Y");
+			tableModel.addColumn("Width");
+			tableModel.addColumn("Height");
+			// Create a JTable with the defaulttablemodel
+			JTable table = new JTable(tableModel);
+			// Have to add it to a JScrollPane or else it won't appear
+			JScrollPane scrollPane = new JScrollPane(table);
+			this.add(scrollPane);
+
 		}
 	}
 	
@@ -95,6 +107,12 @@ public class WhiteBoard extends JFrame implements ModelListener {
 
 	
 	public static void main(String[] args){
+		try{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}catch(Exception ignored){
+			
+		}
 		WhiteBoard obj = new WhiteBoard();
 	}
 }
