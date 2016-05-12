@@ -1,5 +1,6 @@
 public class DLineModel extends DShapeModel {
-	private int x2;
+		//DLine model already inherits x an y from DShapeModel class.
+		private int x2;
         private int y2;
         
         public DLineModel(){
@@ -22,4 +23,23 @@ public class DLineModel extends DShapeModel {
         public void setY2(int newY2){
             y2 = newY2;
         }
+        
+        @Override
+        public int getWidth(){
+        	return 0;
+        }
+        
+        @Override 
+        public int getHeight(){
+        	return 0;
+        }
+        //returns slope of line
+       public double getSlope(){
+    	   //determine sign of slope.
+    	   return ((double)getY2()-(double)getY())/((double)getX2()-(double)getX());
+    	   
+       }
+        
+        
+        
 }

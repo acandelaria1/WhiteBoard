@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -13,6 +16,36 @@ public class Canvas extends JPanel{
 	
 	public Canvas(){
 		displayCanvas();
+		this.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				//System.out.println(e.getX() + " " +e.getY());
+				int x,y;
+				x = e.getX();
+				y = e.getY();
+				DShape selectedShape = findShapeForLocation(x,y);
+				if(selectedShape != null){
+					System.out.println("GOT HERE");
+					selectedShape.setSelected(true);
+					//repaint();
+				}else if(selectedShape == null){
+					for(DShape shape : shapes){
+						shape.setSelected(false);
+					}
+				}
+				repaint();
+			}
+		});
+		
+	}
+	
+	private DShape findShapeForLocation(int x, int y){
+		for(DShape shape : shapes){
+			if(shape.containsPoint(x,y)){
+				return shape;
+			}
+		}
+		return null;
+		
 	}
 	
 	public void displayCanvas(){
@@ -51,5 +84,6 @@ public class Canvas extends JPanel{
 	public void deleteShape(DShape s){
 		
 	}
+
 	
 }

@@ -11,11 +11,10 @@ public class DOval extends DShape {
         }
         
         private void setModel(){
-            dOvalModel.setX(10);
-            dOvalModel.setY(10);
+            dOvalModel.setX(50);
+            dOvalModel.setY(50);
             dOvalModel.setWidth(30);
             dOvalModel.setHeight(30);
-            dOvalModel.setColor(Color.BLUE);
         }
         
         @Override
@@ -34,5 +33,11 @@ public class DOval extends DShape {
 		public Color getColor() {
 			// TODO Auto-generated method stub
 			return dOvalModel.getColor();
+		}
+
+		@Override
+		public boolean containsPoint(int x, int y) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 }

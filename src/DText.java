@@ -19,4 +19,10 @@ public class DText extends DShape{
 		// TODO Auto-generated method stub
 		return dTextModel.getColor();
 	}
+
+	@Override
+	public boolean containsPoint(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

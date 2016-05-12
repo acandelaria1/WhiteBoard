@@ -22,9 +22,7 @@ public class DRect extends DShape {
             dRectModel.setX(10);
             dRectModel.setY(10);
             dRectModel.setWidth(30);
-            dRectModel.setHeight(30);
-            dRectModel.setColor(Color.RED);
-            
+            dRectModel.setHeight(30);            
         }
         
 	@Override
@@ -43,5 +41,11 @@ public class DRect extends DShape {
 	public Color getColor() {
 		// TODO Auto-generated method stub
 		return this.dRectModel.getColor();
+	}
+
+	@Override
+	public boolean containsPoint(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
