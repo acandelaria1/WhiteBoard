@@ -27,7 +27,6 @@ public class Canvas extends JPanel{
 	{
 		super.paintComponent(g);
 		for(DShape shape : shapes){
-			g.setColor(shape.getColor());
 			shape.draw(g);
 		}
 		
@@ -45,7 +44,6 @@ public class Canvas extends JPanel{
 	}
 	
 	public void addShape(DShape shape){
-		//If Shape added is DRect
 		shapes.add(shape);
 		repaint();
 	}

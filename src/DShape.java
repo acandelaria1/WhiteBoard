@@ -3,9 +3,7 @@ import java.awt.Graphics;
 
 public abstract class DShape {
 	
-	
 	public abstract Color getColor();
-	
 	/*
 	 * draw method
 	 */

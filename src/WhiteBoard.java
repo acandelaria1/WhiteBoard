@@ -48,22 +48,54 @@ public class WhiteBoard extends JFrame implements ModelListener {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					DRect rect = new DRect();
-					DRectModel model = new DRectModel();
-					model.setX(10);
-					model.setY(10);
-					model.setWidth(30);
-					model.setHeight(30);
-					model.setColor(Color.RED);
+					canvas.addShape(rect); //add view to canvas
 					
-					canvas.addShape(rect);
+				}
+				
+				
+			});
+                        
+                        //Add button listener for add Oval Button
+			ovalButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DOval oval = new DOval();
+					canvas.addShape(oval); //add view to canvas
+					
+				}
+				
+				
+			});
+                        
+                        //Add button listener for add Line Button
+			lineButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DLine line = new DLine();
+					canvas.addShape(line); //add view to canvas
+					
+				}
+				
+				
+			});
+                        
+                        //Add button listener for add Text Button
+			textButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DText text = new DText();
+					canvas.addShape(text); //add view to canvas
 					
 				}
 				
 				
 			});
 			
+                        
 			shapeButtons = new ArrayList<>(Arrays.asList(rectButton, ovalButton, lineButton, textButton));
 			
 			addShapePanel.add(addLabel);
