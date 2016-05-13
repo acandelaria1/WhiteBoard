@@ -46,7 +46,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			//Add button listener for add Rect Button
 			rectButton.addActionListener(new ActionListener(){
 
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					DRect rect = new DRect();
 					canvas.addShape(rect); //add view to canvas
@@ -59,7 +58,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
                         //Add button listener for add Oval Button
 			ovalButton.addActionListener(new ActionListener(){
 
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					DOval oval = new DOval();
 					canvas.addShape(oval); //add view to canvas
@@ -72,7 +70,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
                         //Add button listener for add Line Button
 			lineButton.addActionListener(new ActionListener(){
 
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					DLine line = new DLine();
 					canvas.addShape(line); //add view to canvas
@@ -85,7 +82,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
                         //Add button listener for add Text Button
 			textButton.addActionListener(new ActionListener(){
 
-				@Override
 				public void actionPerformed(ActionEvent e) {
 					DText text = new DText();
 					canvas.addShape(text); //add view to canvas
@@ -109,7 +105,14 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JPanel setColorPanel = new JPanel();
 			JButton setColorButton = new JButton("Set Color");
 			setColorPanel.add(setColorButton);
+			setColorButton.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent i)
+				{
+					canvas.choiceofcolor();
+				}
+			});
 			this.add(setColorPanel);
+			
 			
 			//TextInputPanel
 			JPanel textInputPanel = new JPanel();
@@ -126,6 +129,13 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JButton removeShapeButton = new JButton("Remove Shape");
 			List<JButton> opButtons;
 			opButtons = new ArrayList<>(Arrays.asList(moveFrontButton, moveBackButton, removeShapeButton));
+			
+			removeShapeButton.addActionListener( new ActionListener(){
+				public void actionPerformed(ActionEvent i)
+				{
+					canvas.removeShape();
+				}
+			});
 			
 			for(JButton b: opButtons){
 				shapeOperationsPanel.add(b);
