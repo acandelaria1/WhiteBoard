@@ -51,8 +51,36 @@ public abstract class DShape {
 		differenceY = (prevY - y);
 		moveOriginTo(originx, prevY - differenceY);
 		dShapeModel.setWidth(dShapeModel.getWidth()+differenceX);
-		dShapeModel.setHeight(dShapeModel.getHeight()+differenceY);
+		dShapeModel.setHeight(dShapeModel.getHeight()+differenceY);	
+	}
+	
+	public void dragAnchorThree(int x, int y){
+		DShapeModel shapeModel = this.dShapeModel;
+		System.out.println("DRAG ANCHOR THREE CALLED!");
+		int originy, prevX, prevY, differenceX, differenceY;
+		originy = shapeModel.getY();
+		prevX = shapeModel.getX();
+		prevY = shapeModel.getY()+shapeModel.getHeight();
+		differenceX = (prevX - x);
+		differenceY = (y - prevY);
+		moveOriginTo(prevX+differenceX,originy);
+		dShapeModel.setWidth(shapeModel.getWidth()+differenceX);
+		dShapeModel.setHeight(shapeModel.getHeight()+differenceY);
 		
+	}
+	
+	public void dragAnchorFour(int x, int y){
+		DShapeModel shapeModel = this.dShapeModel;
+		System.out.println("DRAG ANCHOR FOUR CALLED!");
+		int originx,originy, prevX, prevY, differenceX, differenceY;
+		originx = shapeModel.getX();
+		originy = shapeModel.getY();
+		prevX = originx + shapeModel.getWidth();
+		prevY = originy + shapeModel.getHeight();
+		differenceX = x - prevX;
+		differenceY = y - prevY;
+		dShapeModel.setWidth(shapeModel.getWidth() + differenceX);
+		dShapeModel.setHeight(shapeModel.getHeight() + differenceY);
 	}
 	
 	

@@ -62,9 +62,10 @@ public class Canvas extends JPanel{
 							
 							if(anchorNumber == 1)shape.dragAnchorOne(x,y);
 							else if(anchorNumber == 2)shape.dragAnchorTwo(x,y);
-							
+							else if(anchorNumber == 3)shape.dragAnchorThree(x,y);
+							else if(anchorNumber == 4)shape.dragAnchorFour(x,y);
 						}else{
-							//shape.moveTo(e.getX(),e.getY());
+							shape.moveTo(e.getX(),e.getY());
 						}
 						repaint();
 					}
