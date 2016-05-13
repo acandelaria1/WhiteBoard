@@ -11,6 +11,13 @@ public class DOval extends DShape {
             setModel();
         }
         
+      //constructor for opening a file
+        public DOval(DOvalModel aModel){
+             //set the model
+        	this.dOvalModel = aModel;
+        }
+
+        
         private void setModel(){
             dOvalModel.setX(50);
             dOvalModel.setY(50);

@@ -12,6 +12,13 @@ public class DRect extends DShape {
         setModel();
 	}
 	
+	//constructor for opening a file
+    public DRect(DRectModel aModel){
+            //set the model
+	this.dRectModel = aModel;
+}
+
+	
 	public DRectModel getShapeModel(){
 		return dRectModel;
 	}

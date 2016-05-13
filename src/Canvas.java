@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
-	List<DShape> shapes = new ArrayList<DShape>();
+	private List<DShape> shapes = new ArrayList<DShape>();
 	//DShape selectedShape;
 	
 	public Canvas(){
@@ -83,6 +83,10 @@ public class Canvas extends JPanel{
 		
 	}
 	
+	public List<DShape> getShapes(){
+		return this.shapes;
+	}
+	
 	private DShape findShapeForLocation(int x, int y){
 		for(DShape shape : shapes){
 			if(shape.containsPoint(x,y)){
@@ -129,6 +133,49 @@ public class Canvas extends JPanel{
 	public void deleteShape(DShape s){
 		
 	}
+	
+	/*
+	 * method clear all shapes from canvas for opening files
+	 */
+	public void clear(){
+		shapes.clear();
+        repaint();
+	}
+	
+	/*
+    Returns models for all shapes in shapes list (for saving file)
+    @return a DShapeModel list
+    */
+    public List<DShapeModel> getModels(){
+        List<DShapeModel> models = new ArrayList<DShapeModel>();
+        for(DShape s : shapes){
+            models.add(s.getdShapeModel());
+        }
+        return models;
+    }
+    
+    /*
+    Adds shape to canvas (for opening files)
+    */
+    public void doAdd(DShapeModel model){
+        //use the model to create a shape
+        if(model instanceof DRectModel){
+            DRect shape = new DRect((DRectModel) model);
+            shapes.add(shape);
+        }else if(model instanceof DOvalModel){
+            DOval shape = new DOval((DOvalModel) model);
+            shapes.add(shape);
+        }else if(model instanceof DLineModel){
+            DLine shape = new DLine((DLineModel) model);
+            shapes.add(shape);
+        }else if(model instanceof DTextModel){
+            DText shape = new DText((DTextModel) model);
+            shapes.add(shape);
+        }
+        repaint();
+       
+    }
+
 
 	
 }

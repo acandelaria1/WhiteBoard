@@ -1,6 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.awt.*;
@@ -147,14 +156,70 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JScrollPane scrollPane = new JScrollPane(table);
 			this.add(scrollPane);
 			
-			
 			//Add Save and Open Buttons Panel
 			JPanel filePanel = new JPanel();
-			JButton saveButton, openButton;
+			JButton saveButton, openButton, saveImageButton;
 			saveButton = new JButton("Save");
 			openButton = new JButton("Open");
+			saveImageButton = new JButton("Save Image");
+			
+			
+			//add ActionListener for save button
+            //prompt user for filename
+            saveButton.addActionListener(new ActionListener(){
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String savedName = JOptionPane.showInputDialog("Enter in a file name: ", null);
+                            if(savedName != null)
+                            {
+                                File f = new File(savedName);
+                                save(f);
+                            }
+		
+	}
+});
+            
+            //add ActionListener for open button
+            openButton.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(whiteBoardMode == Mode.NORMAL){
+                        String fileName = JOptionPane.showInputDialog("Enter in a file name: ", null);
+                        if(fileName != null)
+                            {
+                                File f = new File(fileName);
+                                open(f);
+                            }
+                        }
+                    }
+            
+            });
+            
+            //add ActionListener for save image button
+            saveImageButton.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String fileName = JOptionPane.showInputDialog("Enter in a file name: ", null);
+                        if(fileName != null)
+                            {
+                                File f = new File(fileName);
+                                saveImage(f);
+                            }
+                        }
+            
+            });
+
+			
+			
+			
+			
+			
+			
+			
 			filePanel.add(openButton);
 			filePanel.add(saveButton);
+			filePanel.add(saveImageButton);
 			this.add(filePanel);
 			
 
@@ -188,6 +253,62 @@ public class WhiteBoard extends JFrame implements ModelListener {
 		// TODO Auto-generated method stub
 		repaint();
 	}
+	
+	 /*
+    Method saves DShapeModels
+    */
+    public void save(File file){
+        try {
+            XMLEncoder xmlOut = new XMLEncoder(
+                    new BufferedOutputStream(
+                    new FileOutputStream(file)));
+            List<DShapeModel> modelList = canvas.getModels();
+            DShapeModel[] modelArray = modelList.toArray(new DShapeModel[0]);
+            xmlOut.writeObject(modelArray);       
+            xmlOut.close();
+        }
+        
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void saveImage(File file){
+    	//Take away knobs by iterating through canvas.shapes and setting selected to false
+    	for(DShape shape : canvas.getShapes()){
+    		shape.setSelected(false);
+    	}
+        BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        canvas.paint(image.getGraphics());
+        
+        try{
+            javax.imageio.ImageIO.write(image, "PNG", file);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void open(File file){
+        DShapeModel[] modelArray = null;
+        try{
+            XMLDecoder xmlIn = new XMLDecoder(new BufferedInputStream(
+            new FileInputStream(file)));
+            //read in array of DShapes
+            modelArray = (DShapeModel[]) xmlIn.readObject();
+            xmlIn.close();
+            //wipe out old view
+            canvas.clear();
+            //create shapes from model array and add to view
+            for(DShapeModel d : modelArray){
+                canvas.doAdd(d);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 	
 	public static void main(String[] args){

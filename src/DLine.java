@@ -5,14 +5,22 @@ import java.awt.Graphics;
 public class DLine extends DShape{
 	
 	private DLineModel dLineModel;
-	private Boolean selected;
-        public DLine(){
+	private Boolean selected = false;
+	
+    public DLine(){
                 //shape should take care of model
 		this.dLineModel = new DLineModel();
 		this.setdShapeModel(this.dLineModel);
 		selected = false;
                 setModel();
 	}
+    
+    //constructor for opening a file
+    public DLine(DLineModel aModel){
+         //set the model
+    	this.dLineModel = aModel;
+    }
+
         
         public void setModel(){
             dLineModel.setX(70);

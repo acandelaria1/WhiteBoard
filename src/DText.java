@@ -10,6 +10,12 @@ public class DText extends DShape{
 		this.setdShapeModel(this.dTextModel);
 	}
 	
+	//constructor for opening a file
+    public DText(DTextModel model){
+        this.dTextModel = model;
+    }
+
+	
 	@Override
 	public void draw(Graphics g){
 		// TODO: Dtext spefic draw method
