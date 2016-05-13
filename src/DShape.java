@@ -28,6 +28,10 @@ public abstract class DShape {
 		this.selected = sel;
 	}
 	
+	public void setColor(Color c){
+		this.dShapeModel.setColor(c);
+	}
+	
 	public void dragAnchorOne(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
 		int prevX,prevY, differenceX, differenceY;

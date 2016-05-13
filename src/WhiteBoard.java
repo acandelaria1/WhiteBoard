@@ -102,11 +102,8 @@ public class WhiteBoard extends JFrame implements ModelListener {
 				}
 				
 				
-			});
-			
-                        
+			});         
 			shapeButtons = new ArrayList<>(Arrays.asList(rectButton, ovalButton, lineButton, textButton));
-			
 			addShapePanel.add(addLabel);
 			for(JButton b: shapeButtons){
 				addShapePanel.add(b);
@@ -117,6 +114,16 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			//Set Color Panel
 			JPanel setColorPanel = new JPanel();
 			JButton setColorButton = new JButton("Set Color");
+			final JColorChooser colorChooser = new JColorChooser();
+			setColorButton.addActionListener(new ActionListener ()
+			{
+				public void actionPerformed(ActionEvent i)
+				{
+					canvas.chooseColor();
+								
+				}
+		
+			});
 			setColorPanel.add(setColorButton);
 			this.add(setColorPanel);
 			
@@ -176,9 +183,8 @@ public class WhiteBoard extends JFrame implements ModelListener {
                                 File f = new File(savedName);
                                 save(f);
                             }
-		
-	}
-});
+				}
+            });
             
             //add ActionListener for open button
             openButton.addActionListener(new ActionListener(){
@@ -209,14 +215,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
                         }
             
             });
-
-			
-			
-			
-			
-			
-			
-			
 			filePanel.add(openButton);
 			filePanel.add(saveButton);
 			filePanel.add(saveImageButton);

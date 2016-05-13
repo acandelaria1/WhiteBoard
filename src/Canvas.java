@@ -7,13 +7,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
 	private List<DShape> shapes = new ArrayList<DShape>();
-	//DShape selectedShape;
+	DShape selectedShape;
 	
 	public Canvas(){
 		displayCanvas();
@@ -26,6 +28,7 @@ public class Canvas extends JPanel{
 				DShape selectedShape = findShapeForLocation(x,y);
 				if(selectedShape != null){
 					selectedShape.setSelected(true);
+					Canvas.this.selectedShape = selectedShape;
 					System.out.println("IS ANCHOR CHOSEN? "+ selectedShape.isAnchorChosen(x, y));
 
 					int indexForSelectedShape = shapes.indexOf(selectedShape);
@@ -173,8 +176,20 @@ public class Canvas extends JPanel{
             shapes.add(shape);
         }
         repaint();
-       
     }
+    
+    public void chooseColor() {
+		//if(selected)
+		//{
+			final JColorChooser color = new JColorChooser();
+			Color selected = color.showDialog(getParent(), "Choose", Color.white);
+			this.selectedShape.setColor(selected);
+			repaint();
+	
+		//}
+		
+	}
+	
 
 
 	
