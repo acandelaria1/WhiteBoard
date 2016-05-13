@@ -104,9 +104,11 @@ public class Canvas extends JPanel{
 	}
 	
 	private DShape findShapeForLocation(int x, int y){
-		for(DShape shape : shapes){
-			if(shape.containsPoint(x,y)){
-				return shape;
+			DShape shape;
+			for(int i = shapes.size()-1; i>=0; i--){
+				shape = shapes.get(i);
+				if(shape.containsPoint(x,y)){
+					return shape;
 			}
 		}
 		return null;

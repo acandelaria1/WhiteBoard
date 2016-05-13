@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public abstract class DShape {
-	static int ANCHORSIZE = 10;
+	static int ANCHORSIZE = 20;
 	boolean selected;
 	private DShapeModel dShapeModel;
 	public static int KNOB_DIMENSION = 3;
