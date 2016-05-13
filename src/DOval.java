@@ -26,7 +26,7 @@ public class DOval extends DShape {
 		width = dOvalModel.getWidth();
 		height = dOvalModel.getHeight();
                 g.setColor(dOvalModel.getColor());
-		g.drawOval(x, y, width, width);
+		g.drawOval(x, y, width, height);
 		g.fillOval(x, y, width, height);
 		super.draw(g);
    }

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -12,7 +13,7 @@ public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
 	List<DShape> shapes = new ArrayList<DShape>();
-	
+	//DShape selectedShape;
 	
 	public Canvas(){
 		displayCanvas();
@@ -25,6 +26,8 @@ public class Canvas extends JPanel{
 				DShape selectedShape = findShapeForLocation(x,y);
 				if(selectedShape != null){
 					selectedShape.setSelected(true);
+					System.out.println("IS ANCHOR CHOSEN? "+ selectedShape.isAnchorChosen(x, y));
+
 					int indexForSelectedShape = shapes.indexOf(selectedShape);
 					for(int i =0; i<shapes.size(); i++){
 						if(i != indexForSelectedShape){
@@ -38,6 +41,43 @@ public class Canvas extends JPanel{
 				}
 				repaint();
 			}
+		});
+		
+		this.addMouseMotionListener(new MouseMotionListener(){
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int x, y;
+				x = e.getX();
+				y = e.getY();
+				
+				for(DShape shape : shapes){
+					if(shape.isSelected()){
+						//Handle when a anchor is moved
+						int anchorNumber = 0;
+						if((anchorNumber = shape.isAnchorChosen(x, y)) != 0){
+							System.out.println("FROM MOUSE DRAGGED ANCHOR NUMBER "+ anchorNumber);
+							//Dont do anything yet
+							
+							if(anchorNumber == 1)shape.dragAnchorOne(x,y);
+							else if(anchorNumber == 2)shape.dragAnchorTwo(x,y);
+							
+						}else{
+							//shape.moveTo(e.getX(),e.getY());
+						}
+						repaint();
+					}
+				}
+				
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
 		
 	}

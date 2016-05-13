@@ -35,7 +35,7 @@ public class DRect extends DShape {
 		width = dRectModel.getWidth();
 		height = dRectModel.getHeight();
                 g.setColor(dRectModel.getColor());
-		g.drawRect(x, y, width, width);
+		g.drawRect(x, y, width, height);
 		g.fillRect(x, y, width, height);
 		super.draw(g);
 	}

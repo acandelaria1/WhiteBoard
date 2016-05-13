@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public abstract class DShape {
+	static int ANCHORSIZE = 10;
 	boolean selected;
 	private DShapeModel dShapeModel;
 	public static int KNOB_DIMENSION = 3;
@@ -10,7 +11,6 @@ public abstract class DShape {
 	 * draw method
 	 */
 	public void draw(Graphics g){
-		System.out.println("DSHAPE DRAW CALLED");
 		if(selected) drawKnobs(g);
 	}
 	
@@ -27,6 +27,34 @@ public abstract class DShape {
 	public void setSelected(Boolean sel){
 		this.selected = sel;
 	}
+	
+	public void dragAnchorOne(int x, int y){
+		DShapeModel shapeModel = this.dShapeModel;
+		int prevX,prevY, differenceX, differenceY;
+		prevX = shapeModel.getX();
+		prevY = shapeModel.getY();
+		differenceX = (prevX-x);
+		differenceY = (prevY-y);
+		moveOriginTo(x,y);
+		dShapeModel.setWidth(dShapeModel.getWidth()+differenceX);
+		dShapeModel.setHeight(dShapeModel.getHeight()+differenceY);
+	}
+	
+	public void dragAnchorTwo(int x, int y){
+		DShapeModel shapeModel = this.dShapeModel;
+		System.out.println("DRAG ANCHOR TWO CALLED!!!!!!!!!!!!!!");
+		int originx,prevX, prevY, differenceX, differenceY;
+		originx=shapeModel.getX();
+		prevX = shapeModel.getX()+shapeModel.getWidth();
+		prevY = shapeModel.getY();
+		differenceX = (x - prevX );
+		differenceY = (prevY - y);
+		moveOriginTo(originx, prevY - differenceY);
+		dShapeModel.setWidth(dShapeModel.getWidth()+differenceX);
+		dShapeModel.setHeight(dShapeModel.getHeight()+differenceY);
+		
+	}
+	
 	
 	public void drawKnobs(Graphics g){
 		int x1,y1,x2,y2,x3,y3,x4,y4;
@@ -61,6 +89,72 @@ public abstract class DShape {
 		g.fillRect(x4-2, y2-4, KNOB_DIMENSION, KNOB_DIMENSION);
 
 		
+	}
+	
+	public void moveOriginTo(int x, int y){
+		dShapeModel.setX(x);
+		dShapeModel.setY(y);
+	}
+	
+	public void moveTo(int x, int y){
+		dShapeModel.setX(x-dShapeModel.getWidth()/2);
+		dShapeModel.setY(y-dShapeModel.getHeight()/2);
+	}
+	
+	public int isAnchorChosen(int x, int y){
+		
+		if(isAnchorOneChosen(x,y)){
+			System.out.println("ANCHOR 1 CHOSEN!!!");
+			return 1;
+		}else if(isAnchorTwoChosen(x,y)){
+			System.out.println("ANCHOR 1 CHOSEN!!!");
+			return 2;
+		}else if(isAnchorThreeChosen(x,y)){
+			System.out.println("ANCHOR 1 CHOSEN!!!");
+			return 3;
+
+		}else if(isAnchorFourChosen(x,y)){
+			System.out.println("ANCHOR 1 CHOSEN!!!");
+			return 4;
+		}
+		
+		return 0;
+	}
+	
+	//Anchor one is defined as the anchor point of the shapeModel.
+	//In shape model this is defined as x and y
+	private boolean isAnchorOneChosen(int x, int y){
+		int shapeX = dShapeModel.getX();
+		int shapeY = dShapeModel.getY();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;
+		
+		return false;
+	}
+	
+	//Anchor two is defined as the anchor point x+width , y
+	private boolean isAnchorTwoChosen(int x, int y){
+		
+		int shapeX = dShapeModel.getX() + dShapeModel.getWidth();
+		int shapeY = dShapeModel.getY();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;
+		
+		return false;
+	}
+	
+	//Anchor three is defined as the anchor point x, y+height
+	private boolean isAnchorThreeChosen(int x, int y){
+		int shapeX = dShapeModel.getX();
+		int shapeY = dShapeModel.getY() + dShapeModel.getHeight();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;	
+		return false;
+	}
+	
+	//Anchor four is defined as the anchor point x+width, y+height
+	private boolean isAnchorFourChosen(int x , int y){
+		int shapeX = dShapeModel.getX() + dShapeModel.getWidth();
+		int shapeY = dShapeModel.getY() + dShapeModel.getHeight();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;
+		return false;
 	}
 
 	public boolean containsPoint(int x, int y){

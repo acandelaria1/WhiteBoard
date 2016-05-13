@@ -186,7 +186,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 	@Override
 	public void modelChanged() {
 		// TODO Auto-generated method stub
-		
+		repaint();
 	}
 
 	

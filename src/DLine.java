@@ -30,14 +30,12 @@ public class DLine extends DShape{
 		y2 = dLineModel.getY2();
                 g.setColor(dLineModel.getColor());
 		g.drawLine(x1, y1, x2, y2);
-		System.out.println("GOT TO DRAW ! SELECTED = " + this.selected);
 		if(selected) drawKnobs(g);
 	}
 	
 	@Override
 	public void drawKnobs(Graphics g){
 		//find each end of the lines points..
-		System.out.println("GOT TO DRAWKNOBS! selected = " + this.selected);
 		int x1, x2,y1,y2;
 		x1 = dLineModel.getX();
 		x2 = dLineModel.getX2();
@@ -75,9 +73,8 @@ public class DLine extends DShape{
 		//Find y intercept
 		double b = (double)dLineModel.getY() - slope*(double)dLineModel.getX();
 		//now plug int point to see if it intersects the line
-		if(y > (int)(slope*(double)x + b-20) && y < (int)(slope*(double)x+b+20)){
+		if(y > (int)(slope*(double)x + b-30) && y < (int)(slope*(double)x+b+30)){
 			if(y <= Math.max(y1, y2) && y >= Math.min(y1, y2)){
-				System.out.println("HAS BEEN SELECTED " + (int)(slope*(double)x+b));
 				this.selected=true;
 				return true;
 			}
