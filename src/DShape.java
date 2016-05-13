@@ -57,13 +57,14 @@ public abstract class DShape {
 	public void dragAnchorThree(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
 		System.out.println("DRAG ANCHOR THREE CALLED!");
-		int originy, prevX, prevY, differenceX, differenceY;
+		int originy, originx,prevX, prevY, differenceX, differenceY;
 		originy = shapeModel.getY();
+		originx = shapeModel.getX();
 		prevX = shapeModel.getX();
-		prevY = shapeModel.getY()+shapeModel.getHeight();
+		prevY = originy+shapeModel.getHeight();
 		differenceX = (prevX - x);
 		differenceY = (y - prevY);
-		moveOriginTo(prevX+differenceX,originy);
+		moveOriginTo(originx-differenceX,originy);
 		dShapeModel.setWidth(shapeModel.getWidth()+differenceX);
 		dShapeModel.setHeight(shapeModel.getHeight()+differenceY);
 		
