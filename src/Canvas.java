@@ -7,12 +7,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
 	List<DShape> shapes = new ArrayList<DShape>();
+	private int position;
 	//DShape selectedShape;
 	
 	public Canvas(){
@@ -29,6 +32,7 @@ public class Canvas extends JPanel{
 					System.out.println("IS ANCHOR CHOSEN? "+ selectedShape.isAnchorChosen(x, y));
 
 					int indexForSelectedShape = shapes.indexOf(selectedShape);
+					position = indexForSelectedShape;
 					for(int i =0; i<shapes.size(); i++){
 						if(i != indexForSelectedShape){
 							shapes.get(i).setSelected(false);
@@ -45,7 +49,6 @@ public class Canvas extends JPanel{
 		
 		this.addMouseMotionListener(new MouseMotionListener(){
 
-			@Override
 			public void mouseDragged(MouseEvent e) {
 				// TODO Auto-generated method stub
 				int x, y;
@@ -73,7 +76,6 @@ public class Canvas extends JPanel{
 				
 			}
 
-			@Override
 			public void mouseMoved(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
@@ -128,6 +130,24 @@ public class Canvas extends JPanel{
 	
 	public void deleteShape(DShape s){
 		
+	}
+	
+	// Set Color Option
+	public void choiceofcolor() {
+		if(shapes.get(position).selected)
+		{
+			 JColorChooser color = new JColorChooser();
+			Color selected = color.showDialog(getParent(), "Choose", Color.white);
+			shapes.get(position).getdShapeModel().setColor(selected);
+			
+			repaint();
+		}
+	}
+	
+	// Removes a selected shape
+	public void removeShape(){
+		shapes.remove(position);
+		repaint();
 	}
 
 	
