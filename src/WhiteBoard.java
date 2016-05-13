@@ -143,6 +143,17 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			List<JButton> opButtons;
 			opButtons = new ArrayList<>(Arrays.asList(moveFrontButton, moveBackButton, removeShapeButton));
 			
+			removeShapeButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DShape selectedShape = WhiteBoard.this.canvas.getSelectedShape();
+					WhiteBoard.this.canvas.removeShape(selectedShape);
+				}
+				
+			});
+			
+			
 			for(JButton b: opButtons){
 				shapeOperationsPanel.add(b);
 			}

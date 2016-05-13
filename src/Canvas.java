@@ -15,16 +15,16 @@ public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
 	private List<DShape> shapes = new ArrayList<DShape>();
-	DShape selectedShape;
+	private DShape selectedShape;
 	
 	public Canvas(){
 		displayCanvas();
 		this.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				//System.out.println(e.getX() + " " +e.getY());
 				int x,y;
 				x = e.getX();
 				y = e.getY();
+				Canvas.this.selectedShape = null;
 				DShape selectedShape = findShapeForLocation(x,y);
 				if(selectedShape != null){
 					selectedShape.setSelected(true);
@@ -88,6 +88,19 @@ public class Canvas extends JPanel{
 	
 	public List<DShape> getShapes(){
 		return this.shapes;
+	}
+	
+	public void removeShape(DShape shape){
+		shapes.remove(shape);
+		repaint();
+	}
+	
+	public DShape getSelectedShape(){
+		return this.selectedShape;
+	}
+	
+	public void setSelectedShape(DShape shape){
+		this.selectedShape = shape;
 	}
 	
 	private DShape findShapeForLocation(int x, int y){
@@ -179,15 +192,10 @@ public class Canvas extends JPanel{
     }
     
     public void chooseColor() {
-		//if(selected)
-		//{
 			final JColorChooser color = new JColorChooser();
 			Color selected = color.showDialog(getParent(), "Choose", Color.white);
 			this.selectedShape.setColor(selected);
 			repaint();
-	
-		//}
-		
 	}
 	
 
