@@ -131,14 +131,22 @@ public class Canvas extends JPanel{
 	}
 	
 	/*
-	 * moveFront() method:
+	 * moveFront() method: only works if a shape is selected
 	 */
-	public void moveFront(DShape s){
-		
+	public void moveFront(){
+		if(selectedShape != null){
+			shapes.remove(selectedShape);
+			shapes.add(selectedShape);
+		}
+		repaint();
 	}
 	
-	public void moveBack(DShape s){
-		
+	public void moveBack(){
+		if(selectedShape != null){
+			shapes.remove(selectedShape);
+			shapes.add(0,selectedShape);
+		}
+		repaint();
 	}
 	
 	public void addShape(DShape shape){
