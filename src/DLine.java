@@ -9,15 +9,16 @@ public class DLine extends DShape{
         public DLine(){
                 //shape should take care of model
 		this.dLineModel = new DLineModel();
+		this.setdShapeModel(this.dLineModel);
 		selected = false;
                 setModel();
 	}
         
         public void setModel(){
             dLineModel.setX(70);
-            dLineModel.setY(80);
+            dLineModel.setY(100);
             dLineModel.setX2(100);
-            dLineModel.setY2(100);
+            dLineModel.setY2(120);
         }
         
 	@Override

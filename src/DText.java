@@ -7,6 +7,7 @@ public class DText extends DShape{
 	
 	public DText(){
 		this.dTextModel = new DTextModel();
+		this.setdShapeModel(this.dTextModel);
 	}
 	
 	@Override

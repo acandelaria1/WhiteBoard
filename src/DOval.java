@@ -7,6 +7,7 @@ public class DOval extends DShape {
 	
         public DOval(){
             this.dOvalModel = new DOvalModel();
+            super.setdShapeModel(dOvalModel);
             setModel();
         }
         
@@ -27,7 +28,8 @@ public class DOval extends DShape {
                 g.setColor(dOvalModel.getColor());
 		g.drawOval(x, y, width, width);
 		g.fillOval(x, y, width, height);
-        }
+		super.draw(g);
+   }
 
 		@Override
 		public Color getColor() {
@@ -35,9 +37,5 @@ public class DOval extends DShape {
 			return dOvalModel.getColor();
 		}
 
-		@Override
-		public boolean containsPoint(int x, int y) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+		
 }

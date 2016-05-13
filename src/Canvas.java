@@ -24,9 +24,13 @@ public class Canvas extends JPanel{
 				y = e.getY();
 				DShape selectedShape = findShapeForLocation(x,y);
 				if(selectedShape != null){
-					System.out.println("GOT HERE");
 					selectedShape.setSelected(true);
-					//repaint();
+					int indexForSelectedShape = shapes.indexOf(selectedShape);
+					for(int i =0; i<shapes.size(); i++){
+						if(i != indexForSelectedShape){
+							shapes.get(i).setSelected(false);
+						}
+					}
 				}else if(selectedShape == null){
 					for(DShape shape : shapes){
 						shape.setSelected(false);

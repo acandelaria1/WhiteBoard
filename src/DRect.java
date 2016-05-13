@@ -8,6 +8,7 @@ public class DRect extends DShape {
 	public DRect(){
                 //shape should take care of model
 		this.dRectModel = new DRectModel();
+		super.setdShapeModel(this.dRectModel);
         setModel();
 	}
 	
@@ -27,6 +28,7 @@ public class DRect extends DShape {
         
 	@Override
 	public void draw(Graphics g){
+		
 		int x,y,width,height;
 		x = dRectModel.getX();
 		y = dRectModel.getY();
@@ -35,6 +37,7 @@ public class DRect extends DShape {
                 g.setColor(dRectModel.getColor());
 		g.drawRect(x, y, width, width);
 		g.fillRect(x, y, width, height);
+		super.draw(g);
 	}
 
 	@Override
@@ -43,9 +46,5 @@ public class DRect extends DShape {
 		return this.dRectModel.getColor();
 	}
 
-	@Override
-	public boolean containsPoint(int x, int y) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 }
