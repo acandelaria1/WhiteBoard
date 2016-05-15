@@ -7,25 +7,28 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class Canvas extends JPanel{
 
 	final static int DIMENSION = 400;
 	private List<DShape> shapes = new ArrayList<DShape>();
-	//DShape selectedShape;
+	private DShape selectedShape;
 	
 	public Canvas(){
 		displayCanvas();
 		this.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				//System.out.println(e.getX() + " " +e.getY());
 				int x,y;
 				x = e.getX();
 				y = e.getY();
+				Canvas.this.selectedShape = null;
 				DShape selectedShape = findShapeForLocation(x,y);
 				if(selectedShape != null){
 					selectedShape.setSelected(true);
+					Canvas.this.selectedShape = selectedShape;
 					System.out.println("IS ANCHOR CHOSEN? "+ selectedShape.isAnchorChosen(x, y));
 
 					int indexForSelectedShape = shapes.indexOf(selectedShape);
@@ -87,10 +90,25 @@ public class Canvas extends JPanel{
 		return this.shapes;
 	}
 	
+	public void removeShape(DShape shape){
+		shapes.remove(shape);
+		repaint();
+	}
+	
+	public DShape getSelectedShape(){
+		return this.selectedShape;
+	}
+	
+	public void setSelectedShape(DShape shape){
+		this.selectedShape = shape;
+	}
+	
 	private DShape findShapeForLocation(int x, int y){
-		for(DShape shape : shapes){
-			if(shape.containsPoint(x,y)){
-				return shape;
+			DShape shape;
+			for(int i = shapes.size()-1; i>=0; i--){
+				shape = shapes.get(i);
+				if(shape.containsPoint(x,y)){
+					return shape;
 			}
 		}
 		return null;
@@ -115,14 +133,22 @@ public class Canvas extends JPanel{
 	}
 	
 	/*
-	 * moveFront() method:
+	 * moveFront() method: only works if a shape is selected
 	 */
-	public void moveFront(DShape s){
-		
+	public void moveFront(){
+		if(selectedShape != null){
+			shapes.remove(selectedShape);
+			shapes.add(selectedShape);
+		}
+		repaint();
 	}
 	
-	public void moveBack(DShape s){
-		
+	public void moveBack(){
+		if(selectedShape != null){
+			shapes.remove(selectedShape);
+			shapes.add(0,selectedShape);
+		}
+		repaint();
 	}
 	
 	public void addShape(DShape shape){
@@ -173,8 +199,15 @@ public class Canvas extends JPanel{
             shapes.add(shape);
         }
         repaint();
-       
     }
+    
+    public void chooseColor() {
+			final JColorChooser color = new JColorChooser();
+			Color selected = color.showDialog(getParent(), "Choose", Color.white);
+			this.selectedShape.setColor(selected);
+			repaint();
+	}
+	
 
 
 	

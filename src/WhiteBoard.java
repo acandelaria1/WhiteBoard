@@ -102,11 +102,8 @@ public class WhiteBoard extends JFrame implements ModelListener {
 				}
 				
 				
-			});
-			
-                        
+			});         
 			shapeButtons = new ArrayList<>(Arrays.asList(rectButton, ovalButton, lineButton, textButton));
-			
 			addShapePanel.add(addLabel);
 			for(JButton b: shapeButtons){
 				addShapePanel.add(b);
@@ -117,6 +114,16 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			//Set Color Panel
 			JPanel setColorPanel = new JPanel();
 			JButton setColorButton = new JButton("Set Color");
+			final JColorChooser colorChooser = new JColorChooser();
+			setColorButton.addActionListener(new ActionListener ()
+			{
+				public void actionPerformed(ActionEvent i)
+				{
+					canvas.chooseColor();
+								
+				}
+		
+			});
 			setColorPanel.add(setColorButton);
 			this.add(setColorPanel);
 			
@@ -135,6 +142,36 @@ public class WhiteBoard extends JFrame implements ModelListener {
 			JButton removeShapeButton = new JButton("Remove Shape");
 			List<JButton> opButtons;
 			opButtons = new ArrayList<>(Arrays.asList(moveFrontButton, moveBackButton, removeShapeButton));
+			
+			moveFrontButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					WhiteBoard.this.canvas.moveFront();			
+				}
+				
+			});
+			
+			moveBackButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					WhiteBoard.this.canvas.moveBack();
+					
+				}
+				
+			});
+			
+			
+			removeShapeButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DShape selectedShape = WhiteBoard.this.canvas.getSelectedShape();
+					WhiteBoard.this.canvas.removeShape(selectedShape);
+				
+				}
+			});
+			
 			
 			for(JButton b: opButtons){
 				shapeOperationsPanel.add(b);
@@ -176,9 +213,8 @@ public class WhiteBoard extends JFrame implements ModelListener {
                                 File f = new File(savedName);
                                 save(f);
                             }
-		
-	}
-});
+				}
+            });
             
             //add ActionListener for open button
             openButton.addActionListener(new ActionListener(){
@@ -209,14 +245,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
                         }
             
             });
-
-			
-			
-			
-			
-			
-			
-			
 			filePanel.add(openButton);
 			filePanel.add(saveButton);
 			filePanel.add(saveImageButton);

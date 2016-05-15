@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public abstract class DShape {
-	static int ANCHORSIZE = 10;
+	static int ANCHORSIZE = 20;
 	boolean selected;
 	private DShapeModel dShapeModel;
 	public static int KNOB_DIMENSION = 3;
@@ -26,6 +26,10 @@ public abstract class DShape {
 	}
 	public void setSelected(Boolean sel){
 		this.selected = sel;
+	}
+	
+	public void setColor(Color c){
+		this.dShapeModel.setColor(c);
 	}
 	
 	public void dragAnchorOne(int x, int y){
