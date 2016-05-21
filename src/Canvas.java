@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
@@ -207,8 +206,17 @@ public class Canvas extends JPanel{
 			this.selectedShape.setColor(selected);
 			repaint();
 	}
+    
+    public void setText(String newText){
+        if(selectedShape instanceof DText){
+            selectedShape.setText(newText);
+        }
+    }
 	
-
-
+    public void setShapeFont(String s) {
+        if(selectedShape instanceof DText){
+            selectedShape.setFontName(s);
+        }
+    }
 	
 }

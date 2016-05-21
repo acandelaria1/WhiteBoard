@@ -31,6 +31,12 @@ public abstract class DShape {
 	public void setColor(Color c){
 		this.dShapeModel.setColor(c);
 	}
+        
+        public void setText(String s){
+        }
+        
+        public void setFontName(String s){  
+        }
 	
 	public void dragAnchorOne(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
