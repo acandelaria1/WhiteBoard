@@ -42,6 +42,7 @@ public class Canvas extends JPanel{
 					}
 				}
 				repaint();
+				DLine.initiated=false;
 			}
 		});
 		
@@ -60,7 +61,6 @@ public class Canvas extends JPanel{
 						int anchorNumber = 0;
 						if((anchorNumber = shape.isAnchorChosen(x, y)) != 0){
 							System.out.println("FROM MOUSE DRAGGED ANCHOR NUMBER "+ anchorNumber);
-							//Dont do anything yet
 							
 							if(anchorNumber == 1)shape.dragAnchorOne(x,y);
 							else if(anchorNumber == 2)shape.dragAnchorTwo(x,y);

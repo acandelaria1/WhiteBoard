@@ -6,7 +6,9 @@ public class DLine extends DShape{
 	
 	private DLineModel dLineModel;
 	private Boolean selected = false;
-	
+	private int lastX=0;
+	private int lastY=0;
+	public static Boolean initiated = false;
     public DLine(){
                 //shape should take care of model
 		this.dLineModel = new DLineModel();
@@ -81,9 +83,14 @@ public class DLine extends DShape{
 	
 	@Override
 	public void moveTo(int x, int y){
-		//todo
-		
-
+		if(initiated){
+		dLineModel.setX((dLineModel.getX()+(x-lastX)));
+		dLineModel.setX2((dLineModel.getX2()+(x-lastX)));
+		dLineModel.setY(dLineModel.getY() + (y-lastY));
+		dLineModel.setY2(dLineModel.getY2() + (y-lastY));
+		}else initiated = true;
+		this.lastX = x;
+		this.lastY=y;
 	}
 
 	@Override
