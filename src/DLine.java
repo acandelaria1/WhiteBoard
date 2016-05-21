@@ -27,7 +27,24 @@ public class DLine extends DShape{
             dLineModel.setY(100);
             dLineModel.setX2(100);
             dLineModel.setY2(120);
+                  
         }
+        
+    @Override
+    public void dragAnchorTwo(int x, int y){
+    	this.dLineModel.setX2(x);
+    	this.dLineModel.setY2(y);
+    }
+    @Override
+    public boolean isAnchorTwoChosen(int x, int y){
+		
+		int shapeX = dLineModel.getX2();
+		int shapeY = dLineModel.getY2();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;
+		
+		return false;
+	}
+	
         
 	@Override
 	public void draw(Graphics g){
@@ -60,6 +77,13 @@ public class DLine extends DShape{
 		g.fillRect(x2-2, y2-2, KNOB_DIMENSION, KNOB_DIMENSION);
 		
 		//
+	}
+	
+	@Override
+	public void moveTo(int x, int y){
+		//todo
+		
+
 	}
 
 	@Override
