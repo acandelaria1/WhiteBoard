@@ -24,7 +24,7 @@ public class DLineModel extends DShapeModel {
             y2 = newY2;
         }
         
-        @Override
+       @Override
         public int getWidth(){
         	return 0;
         }

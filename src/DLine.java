@@ -6,7 +6,9 @@ public class DLine extends DShape{
 	
 	private DLineModel dLineModel;
 	private Boolean selected = false;
-	
+	private int lastX=0;
+	private int lastY=0;
+	public static Boolean initiated = false;
     public DLine(){
                 //shape should take care of model
 		this.dLineModel = new DLineModel();
@@ -27,7 +29,24 @@ public class DLine extends DShape{
             dLineModel.setY(100);
             dLineModel.setX2(100);
             dLineModel.setY2(120);
+                  
         }
+        
+    @Override
+    public void dragAnchorTwo(int x, int y){
+    	this.dLineModel.setX2(x);
+    	this.dLineModel.setY2(y);
+    }
+    @Override
+    public boolean isAnchorTwoChosen(int x, int y){
+		
+		int shapeX = dLineModel.getX2();
+		int shapeY = dLineModel.getY2();
+		if(x >= shapeX-ANCHORSIZE && x<= shapeX + ANCHORSIZE &&  y >= shapeY-ANCHORSIZE && y <= shapeY+ANCHORSIZE) return true;
+		
+		return false;
+	}
+	
         
 	@Override
 	public void draw(Graphics g){
@@ -61,7 +80,23 @@ public class DLine extends DShape{
 		
 		//
 	}
+<<<<<<< HEAD
         
+=======
+	
+	@Override
+	public void moveTo(int x, int y){
+		if(initiated){
+		dLineModel.setX((dLineModel.getX()+(x-lastX)));
+		dLineModel.setX2((dLineModel.getX2()+(x-lastX)));
+		dLineModel.setY(dLineModel.getY() + (y-lastY));
+		dLineModel.setY2(dLineModel.getY2() + (y-lastY));
+		}else initiated = true;
+		this.lastX = x;
+		this.lastY=y;
+	}
+
+>>>>>>> acandelaria1/master
 	@Override
 	public Color getColor() {
 		// TODO Auto-generated method stub

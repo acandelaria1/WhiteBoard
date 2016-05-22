@@ -146,14 +146,14 @@ public abstract class DShape {
 			System.out.println("ANCHOR 1 CHOSEN!!!");
 			return 1;
 		}else if(isAnchorTwoChosen(x,y)){
-			System.out.println("ANCHOR 1 CHOSEN!!!");
+			System.out.println("ANCHOR 2 CHOSEN!!!");
 			return 2;
 		}else if(isAnchorThreeChosen(x,y)){
-			System.out.println("ANCHOR 1 CHOSEN!!!");
+			System.out.println("ANCHOR 3 CHOSEN!!!");
 			return 3;
 
 		}else if(isAnchorFourChosen(x,y)){
-			System.out.println("ANCHOR 1 CHOSEN!!!");
+			System.out.println("ANCHOR 4 CHOSEN!!!");
 			return 4;
 		}
 		
@@ -171,7 +171,7 @@ public abstract class DShape {
 	}
 	
 	//Anchor two is defined as the anchor point x+width , y
-	private boolean isAnchorTwoChosen(int x, int y){
+	public boolean isAnchorTwoChosen(int x, int y){
 		
 		int shapeX = dShapeModel.getX() + dShapeModel.getWidth();
 		int shapeY = dShapeModel.getY();
