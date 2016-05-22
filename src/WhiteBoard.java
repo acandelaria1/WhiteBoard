@@ -61,6 +61,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     DRect rect = new DRect();
+                    canvas.addShapeToTable(rect);
                     canvas.addShape(rect); //add view to canvas
 
                 }
@@ -73,6 +74,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     DOval oval = new DOval();
+                    canvas.addShapeToTable(oval);
                     canvas.addShape(oval); //add view to canvas
 
                 }
@@ -85,6 +87,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     DLine line = new DLine();
+                    canvas.addShapeToTable(line);
                     canvas.addShape(line); //add view to canvas
 
                 }
@@ -97,6 +100,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     DText text = new DText();
+                    canvas.addShapeToTable(text);
                     canvas.addShape(text); //add view to canvas
 
                 }
@@ -131,12 +135,12 @@ public class WhiteBoard extends JFrame implements ModelListener {
             fontChooser.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JComboBox box = (JComboBox)e.getSource();
+                    JComboBox box = (JComboBox) e.getSource();
                     String fontName = (String) box.getSelectedItem();
                     canvas.setShapeFont(fontName);
                 }
             });
-            
+
             //JButton fontButton = new JButton("Font Name");
             textInputPanel.add(inputTextField);
             //textInputPanel.add(fontButton);
@@ -165,7 +169,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                     canvas.setText(inputTextField.getText());
                     repaint();
                 }
-                
+
             });
 
             //Shape Operations Panel
@@ -210,16 +214,8 @@ public class WhiteBoard extends JFrame implements ModelListener {
 
             this.add(shapeOperationsPanel);
 
-			//Add JTable Panel
-            // Creates a default table model so that we can add columns and rows
-            DefaultTableModel tableModel = new DefaultTableModel();
-            tableModel.addColumn("X");
-            tableModel.addColumn("Y");
-            tableModel.addColumn("Width");
-            tableModel.addColumn("Height");
-            // Create a JTable with the defaulttablemodel
-            JTable table = new JTable(tableModel);
-            // Have to add it to a JScrollPane or else it won't appear
+            //add scrollPane containing JTable (this is where we want it to appear)
+            JTable table = new JTable(canvas.getModel());
             JScrollPane scrollPane = new JScrollPane(table);
             this.add(scrollPane);
 
@@ -298,7 +294,6 @@ public class WhiteBoard extends JFrame implements ModelListener {
 
     @Override
     public void modelChanged() {
-        // TODO Auto-generated method stub
         repaint();
     }
 

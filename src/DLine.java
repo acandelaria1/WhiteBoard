@@ -80,9 +80,7 @@ public class DLine extends DShape{
 		
 		//
 	}
-<<<<<<< HEAD
-        
-=======
+
 	
 	@Override
 	public void moveTo(int x, int y){
@@ -96,16 +94,13 @@ public class DLine extends DShape{
 		this.lastY=y;
 	}
 
->>>>>>> acandelaria1/master
 	@Override
 	public Color getColor() {
-		// TODO Auto-generated method stub
 		return this.dLineModel.getColor();
 	}
 
         @Override
 	public boolean containsPoint(int x, int y) {
-		// TODO Auto-generated method stub
 		//First find slope of line
 		int y1,y2;
 		y1 = dLineModel.getY();
