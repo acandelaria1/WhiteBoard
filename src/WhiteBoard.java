@@ -24,25 +24,99 @@ import javax.swing.table.DefaultTableModel;
 public class WhiteBoard extends JFrame implements ModelListener {
 
     final static String title = "WhiteBoard";
+    final static String DEFAULT_PORT="39587";
     private Canvas canvas;
     private Mode whiteBoardMode;
+    
+   
 
     class ControlPanel extends JPanel {
-
+    	JButton serverStartButton, clientStartButton;
+    	JLabel networkStatus;// = new JLabel("Status: Normal");
+    	JPanel networkingPanel;
         ControlPanel() {
 
             this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
             //Add networkingPanel
-            JPanel networkingPanel = new JPanel();
-            JButton serverStartButton, clientStartButton;
-            JLabel networkStatus = new JLabel("Status: Normal");
+            networkingPanel = new JPanel();
+            networkStatus = new JLabel("Status: Normal");
+            
             serverStartButton = new JButton("Start Server");
             clientStartButton = new JButton("Start Client");
             networkingPanel.add(serverStartButton);
             networkingPanel.add(clientStartButton);
             networkingPanel.add(networkStatus);
             this.add(networkingPanel);
+            
+            
+            //add action listeners to network buttons
+            serverStartButton.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					JFrame portFrame = new JFrame("Server Port");
+					JButton submitButton = new JButton("Submit");
+					submitButton.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							//get text from portNumberField and store it in the server class
+							//set whiteboard status
+							whiteBoardMode = Mode.SERVER;
+							networkStatus.setText("Status: " + Mode.SERVER.toString());
+							portFrame.dispose();
+						}
+					});
+					JPanel panel = new JPanel();
+					JTextField portNumberField = new JTextField(DEFAULT_PORT);
+					panel.add(new JLabel("Port Number:"));
+					panel.add(portNumberField);
+					panel.add(submitButton);
+					
+					portFrame.add(panel);
+					portFrame.setVisible(true);
+					portFrame.pack();
+					portFrame.getRootPane().setDefaultButton(submitButton);
+				}
+            	
+            });
+            
+            
+            
+            clientStartButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					JFrame portFrame = new JFrame("Client Port");
+					JButton submitButton = new JButton("Submit");
+					submitButton.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							//get text from portNumberField and store it in the server class
+							
+							whiteBoardMode = Mode.CLIENT;
+							networkStatus.setText("Status: " + Mode.CLIENT.toString());
+							portFrame.dispose();
+						}
+					});
+					JPanel panel = new JPanel();
+					JTextField portNumberField = new JTextField("127.0.0.1:"+DEFAULT_PORT);
+					panel.add(new JLabel("Port Number:"));
+					panel.add(portNumberField);
+					panel.add(submitButton);
+					
+					portFrame.add(panel);
+					portFrame.setVisible(true);
+					portFrame.pack();
+					portFrame.getRootPane().setDefaultButton(submitButton);
+					
+				}
+            	
+            });
+            
 
             //Add addShapePanel
             JPanel addShapePanel = new JPanel();
@@ -286,6 +360,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
 
     public void displayGui() {
         JFrame theFrame = new JFrame(title);
+        theFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         theFrame.setLayout(new BorderLayout());
         Canvas canvas = new Canvas();
         this.canvas = canvas;
