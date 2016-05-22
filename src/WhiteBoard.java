@@ -7,10 +7,15 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -27,8 +32,106 @@ public class WhiteBoard extends JFrame implements ModelListener {
     final static String DEFAULT_PORT="39587";
     private Canvas canvas;
     private Mode whiteBoardMode;
+    private java.util.List<ObjectOutputStream> outputs = new ArrayList<ObjectOutputStream>();
     
+    class ClientHandler extends Thread{
+    	private int port;
+    	private String name;
+    	ClientHandler(String name, int port){
+    		this.port = port;
+    		this.name = name;
+    	}
+    	
+    	//Connects to server, loops getting messages
+    	public void run(){
+    		try{
+    			Socket toServer = new Socket("127.0.0.1",port);
+    			ObjectInputStream in = new ObjectInputStream(toServer.getInputStream());
+    			while(true){
+    				String xmlString = (String) in.readObject();
+    				XMLDecoder decoder = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
+    				Message message = (Message) decoder.readObject();
+    				System.out.println("client: read " + message);
+    				//checking of commands
+    				invokeToGUI(message);
+    			}
+    		}catch(Exception ex){
+    			ex.printStackTrace();
+    		}
+    	}
+    }
+    
+    public void invokeToGUI(Message message){
+    	final Message temp = message;
+    	SwingUtilities.invokeLater(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+			
+			}
+    		
+    	});
+    }
    
+   public synchronized void addOutput(ObjectOutputStream out){
+	   outputs.add(out);
+   }
+   
+   class ServerAccepter extends Thread{
+	   private int port;
+	   ServerAccepter(int port){
+		   this.port = port;
+	   }
+	   
+	   public void run(){
+		   try{
+			   ServerSocket serverSocket = new ServerSocket(port);
+			   while(true){
+				   Socket toClient = null;
+				   toClient = serverSocket.accept();
+				   System.out.println("server: got client");
+				   addOutput(new ObjectOutputStream(toClient.getOutputStream()));
+			   }
+		   }catch(IOException ex){
+			   ex.printStackTrace();
+		   }
+	   }
+   }
+   
+   
+   
+   public static class Message{
+	   public String command;
+	   public String message;
+	   
+	   public Message(){
+		   command = null;
+		   message = null;
+	   }
+	   
+	   public String getCommand(){
+		   return this.command;
+	   }
+	   
+	   public void setCommand(String c){
+		   this.command = c;
+	   }
+	   
+	   public String getMessage(){
+		   return this.message;
+	   }
+	   
+	   public void setMessage(String message){
+		   this.message = message;
+	   }
+	   
+	   public String toString(){
+		   return "message: " + command;
+	   }
+	   
+   }
+  
 
     class ControlPanel extends JPanel {
     	JButton serverStartButton, clientStartButton;
@@ -96,9 +199,9 @@ public class WhiteBoard extends JFrame implements ModelListener {
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							//get text from portNumberField and store it in the server class
-							
-							whiteBoardMode = Mode.CLIENT;
-							networkStatus.setText("Status: " + Mode.CLIENT.toString());
+							WhiteBoard clientWhiteBoard = new WhiteBoard(Mode.CLIENT);
+							whiteBoardMode = Mode.SERVER;
+							networkStatus.setText("Status: " + Mode.SERVER.toString());
 							portFrame.dispose();
 						}
 					});
@@ -356,6 +459,23 @@ public class WhiteBoard extends JFrame implements ModelListener {
     public WhiteBoard() {
         this.whiteBoardMode = Mode.NORMAL;
         displayGui();
+    }
+    
+    public WhiteBoard(Mode mode) {
+    	if(mode == Mode.CLIENT){
+    		displayClientGui();
+    	}
+        //displayGui();
+    }
+    
+    public void displayClientGui(){
+    	JFrame theFrame = new JFrame("WhiteBoard Client");
+    	theFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    	theFrame.setLayout(new BorderLayout());
+    	Canvas canvas = new Canvas();
+    	theFrame.add(canvas, BorderLayout.CENTER);
+    	theFrame.setVisible(true);
+    	theFrame.pack();
     }
 
     public void displayGui() {
