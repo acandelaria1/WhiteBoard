@@ -52,7 +52,6 @@ public abstract class DShape {
 	
 	public void dragAnchorTwo(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
-		System.out.println("DRAG ANCHOR TWO CALLED!!!!!!!!!!!!!!");
 		int originx,prevX, prevY, differenceX, differenceY;
 		originx=shapeModel.getX();
 		prevX = shapeModel.getX()+shapeModel.getWidth();
@@ -66,7 +65,6 @@ public abstract class DShape {
 	
 	public void dragAnchorThree(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
-		System.out.println("DRAG ANCHOR THREE CALLED!");
 		int originy, originx,prevX, prevY, differenceX, differenceY;
 		originy = shapeModel.getY();
 		originx = shapeModel.getX();
@@ -82,7 +80,6 @@ public abstract class DShape {
 	
 	public void dragAnchorFour(int x, int y){
 		DShapeModel shapeModel = this.dShapeModel;
-		System.out.println("DRAG ANCHOR FOUR CALLED!");
 		int originx,originy, prevX, prevY, differenceX, differenceY;
 		originx = shapeModel.getX();
 		originy = shapeModel.getY();
@@ -143,17 +140,13 @@ public abstract class DShape {
 	public int isAnchorChosen(int x, int y){
 		
 		if(isAnchorOneChosen(x,y)){
-			System.out.println("ANCHOR 1 CHOSEN!!!");
 			return 1;
 		}else if(isAnchorTwoChosen(x,y)){
-			System.out.println("ANCHOR 2 CHOSEN!!!");
 			return 2;
 		}else if(isAnchorThreeChosen(x,y)){
-			System.out.println("ANCHOR 3 CHOSEN!!!");
 			return 3;
 
 		}else if(isAnchorFourChosen(x,y)){
-			System.out.println("ANCHOR 4 CHOSEN!!!");
 			return 4;
 		}
 		
@@ -203,7 +196,6 @@ public abstract class DShape {
 			int width = model.getWidth();
 			if(x>= model.getX() && x <= model.getX() + width && y>= model.getY() && y <= model.getY()+height){
 				this.setSelected(true);
-				System.out.println("SELECTED!!!!");
 				return true;
 			}
 			this.setSelected(false);

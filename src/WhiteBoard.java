@@ -8,12 +8,14 @@ import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -25,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.stream.events.StartDocument;
 
 public class WhiteBoard extends JFrame implements ModelListener {
 
@@ -37,7 +40,9 @@ public class WhiteBoard extends JFrame implements ModelListener {
     class ClientHandler extends Thread{
     	private int port;
     	private String name;
-    	ClientHandler(String name, int port){
+    	private WhiteBoard clientWhiteBoard;
+    	ClientHandler(WhiteBoard whiteBoard,String name, int port){
+    		this.clientWhiteBoard = whiteBoard;
     		this.port = port;
     		this.name = name;
     	}
@@ -45,37 +50,94 @@ public class WhiteBoard extends JFrame implements ModelListener {
     	//Connects to server, loops getting messages
     	public void run(){
     		try{
-    			Socket toServer = new Socket("127.0.0.1",port);
+    			Socket toServer = new Socket("127.0.0.1",Integer.parseInt(DEFAULT_PORT));
     			ObjectInputStream in = new ObjectInputStream(toServer.getInputStream());
     			while(true){
     				String xmlString = (String) in.readObject();
-    				XMLDecoder decoder = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
-    				Message message = (Message) decoder.readObject();
-    				System.out.println("client: read " + message);
+    				XMLDecoder xmlIn = new XMLDecoder(new ByteArrayInputStream(xmlString.getBytes()));
+    				Command command =  (Command)xmlIn.readObject();
+    				DShapeModel shapeModel = (DShapeModel)xmlIn.readObject();
+    				System.out.println("client: read " );
     				//checking of commands
-    				invokeToGUI(message);
+    				System.out.println("CLIENT RECIEVED " + shapeModel +" "+ shapeModel);
+    				invokeToGUI(command, shapeModel);
+    				
     			}
     		}catch(Exception ex){
     			ex.printStackTrace();
     		}
     	}
+    	 public void invokeToGUI(Command command, DShapeModel model){
+    		   final Command com = command;
+    		   final DShapeModel mod = model;
+    		   SwingUtilities.invokeLater(new Runnable(){
+    			@Override
+    			public void run() {
+    				// TODO Auto-generated method stub
+    				switch(command){
+	    			   	case ADD:
+	    			   		clientWhiteBoard.canvas.doAdd(model);
+	    			   		break;
+	    			   	case REMOVE:
+	    			   		clientWhiteBoard.canvas.doRemoveShape(model);
+	    			   		break;
+	    			   	default:
+	    			   		System.out.println("Command not recognized");
+    			   }
+
+    			}
+    			   
+    		   });
+    		   
+    	   }
     }
     
-    public void invokeToGUI(Message message){
-    	final Message temp = message;
-    	SwingUtilities.invokeLater(new Runnable(){
+  
 
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-			
-			}
-    		
-    	});
-    }
-   
    public synchronized void addOutput(ObjectOutputStream out){
 	   outputs.add(out);
+   }
+   public static synchronized void sendRemote(WhiteBoard board, Command command, DShapeModel shapeModel){
+	   System.out.println("Server sending: " + command + " " + shapeModel);
+	   OutputStream memStream = new ByteArrayOutputStream();
+	   XMLEncoder encoder = new XMLEncoder(memStream);
+	   encoder.writeObject(command);
+	   encoder.writeObject(shapeModel);
+	   encoder.close();
+	   String xmlString = memStream.toString();
+	   
+	   Iterator<ObjectOutputStream> it = board.outputs.iterator();
+	   while(it.hasNext()){
+		   ObjectOutputStream out = it.next();
+		   try{
+			   out.writeObject(xmlString);
+			   out.flush();
+		   }catch(Exception ignored){
+			   
+			   it.remove();
+		   }
+	   }
+   }
+   public synchronized void sendRemote(Command command, DShapeModel shapeModel){
+	   System.out.println("Server sending: " + command + " " + shapeModel);
+	   OutputStream memStream = new ByteArrayOutputStream();
+	   XMLEncoder encoder = new XMLEncoder(memStream);
+	   encoder.writeObject(command);
+	   encoder.writeObject(shapeModel);
+	   encoder.close();
+	   String xmlString = memStream.toString();
+	   
+	   Iterator<ObjectOutputStream> it = outputs.iterator();
+	   while(it.hasNext()){
+		   ObjectOutputStream out = it.next();
+		   try{
+			   out.writeObject(xmlString);
+			   out.flush();
+		   }catch(Exception ignored){
+			   
+			   it.remove();
+		   }
+	   }
    }
    
    class ServerAccepter extends Thread{
@@ -92,6 +154,10 @@ public class WhiteBoard extends JFrame implements ModelListener {
 				   toClient = serverSocket.accept();
 				   System.out.println("server: got client");
 				   addOutput(new ObjectOutputStream(toClient.getOutputStream()));
+				   //send already present shape model information to the client.
+				   for(DShape shape : canvas.getShapes()){
+					  sendRemote(Command.ADD, shape.getdShapeModel());
+				   }
 			   }
 		   }catch(IOException ex){
 			   ex.printStackTrace();
@@ -100,42 +166,12 @@ public class WhiteBoard extends JFrame implements ModelListener {
    }
    
    
-   
-   public static class Message{
-	   public String command;
-	   public String message;
-	   
-	   public Message(){
-		   command = null;
-		   message = null;
-	   }
-	   
-	   public String getCommand(){
-		   return this.command;
-	   }
-	   
-	   public void setCommand(String c){
-		   this.command = c;
-	   }
-	   
-	   public String getMessage(){
-		   return this.message;
-	   }
-	   
-	   public void setMessage(String message){
-		   this.message = message;
-	   }
-	   
-	   public String toString(){
-		   return "message: " + command;
-	   }
-	   
-   }
-  
+ 
+ 
 
     class ControlPanel extends JPanel {
     	JButton serverStartButton, clientStartButton;
-    	JLabel networkStatus;// = new JLabel("Status: Normal");
+    	JLabel networkStatus;
     	JPanel networkingPanel;
         ControlPanel() {
 
@@ -167,7 +203,10 @@ public class WhiteBoard extends JFrame implements ModelListener {
 							//get text from portNumberField and store it in the server class
 							//set whiteboard status
 							whiteBoardMode = Mode.SERVER;
+							serverStartButton.setEnabled(false);
 							networkStatus.setText("Status: " + Mode.SERVER.toString());
+							ServerAccepter server = new ServerAccepter(Integer.parseInt(DEFAULT_PORT));
+							server.start();
 							portFrame.dispose();
 						}
 					});
@@ -199,9 +238,20 @@ public class WhiteBoard extends JFrame implements ModelListener {
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							//get text from portNumberField and store it in the server class
+							if(whiteBoardMode != Mode.SERVER){
+								whiteBoardMode = Mode.SERVER;
+								serverStartButton.setEnabled(false);
+								//Instantiate server accepter
+								ServerAccepter server = new ServerAccepter(Integer.parseInt(DEFAULT_PORT));
+								server.start();
+							}
 							WhiteBoard clientWhiteBoard = new WhiteBoard(Mode.CLIENT);
-							whiteBoardMode = Mode.SERVER;
 							networkStatus.setText("Status: " + Mode.SERVER.toString());
+							//send model of shapes over through the socket
+							
+							//create Client
+							ClientHandler client = new ClientHandler(clientWhiteBoard,"127.0.0.1",Integer.parseInt(DEFAULT_PORT));
+							client.start();
 							portFrame.dispose();
 						}
 					});
@@ -240,7 +290,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                     DRect rect = new DRect();
                     canvas.addShapeToTable(rect);
                     canvas.addShape(rect); //add view to canvas
-
+                    sendRemote(Command.ADD,rect.getdShapeModel());
                 }
 
             });
@@ -253,7 +303,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                     DOval oval = new DOval();
                     canvas.addShapeToTable(oval);
                     canvas.addShape(oval); //add view to canvas
-
+                    sendRemote(Command.ADD,oval.getdShapeModel());
                 }
 
             });
@@ -266,7 +316,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                     DLine line = new DLine();
                     canvas.addShapeToTable(line);
                     canvas.addShape(line); //add view to canvas
-
+                    sendRemote(Command.ADD,line.getdShapeModel());
                 }
 
             });
@@ -279,7 +329,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                     DText text = new DText();
                     canvas.addShapeToTable(text);
                     canvas.addShape(text); //add view to canvas
-
+                    sendRemote(Command.ADD,text.getdShapeModel());
                 }
 
             });
@@ -381,6 +431,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
                 public void actionPerformed(ActionEvent e) {
                     DShape selectedShape = WhiteBoard.this.canvas.getSelectedShape();
                     WhiteBoard.this.canvas.removeShape(selectedShape);
+                   sendRemote(Command.REMOVE, selectedShape.getdShapeModel());
 
                 }
             });
@@ -468,7 +519,7 @@ public class WhiteBoard extends JFrame implements ModelListener {
     	JFrame theFrame = new JFrame("WhiteBoard Client");
     	theFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
     	theFrame.setLayout(new BorderLayout());
-    	Canvas canvas = new Canvas();
+    	this.canvas = new Canvas();
     	theFrame.add(canvas, BorderLayout.CENTER);
     	theFrame.setVisible(true);
     	theFrame.pack();

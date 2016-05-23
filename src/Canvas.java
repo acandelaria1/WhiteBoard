@@ -46,8 +46,6 @@ public class Canvas extends JPanel {
                 if (selectedShape != null) {
                     selectedShape.setSelected(true);
                     Canvas.this.selectedShape = selectedShape;
-                    System.out.println("IS ANCHOR CHOSEN? " + selectedShape.isAnchorChosen(x, y));
-
                     int indexForSelectedShape = shapes.indexOf(selectedShape);
                     for (int i = 0; i < shapes.size(); i++) {
                         if (i != indexForSelectedShape) {
@@ -77,8 +75,6 @@ public class Canvas extends JPanel {
                         //Handle when a anchor is moved
                         int anchorNumber = 0;
                         if ((anchorNumber = shape.isAnchorChosen(x, y)) != 0) {
-                            System.out.println("FROM MOUSE DRAGGED ANCHOR NUMBER " + anchorNumber);
-
                             if (anchorNumber == 1) {
                                 shape.dragAnchorOne(x, y);
                                 table(shape);
@@ -94,6 +90,7 @@ public class Canvas extends JPanel {
                             }
                         } else {
                             shape.moveTo(e.getX(), e.getY());
+                            
                             table(shape);
                         }
                         repaint();
@@ -114,13 +111,23 @@ public class Canvas extends JPanel {
         return this.shapes;
     }
 
+    public void doRemoveShape(DShapeModel shapeModel){
+    	for(DShape shape: shapes){
+    		System.out.println(shape.getdShapeModel() + " " + shapeModel);
+    		if(shape.getdShapeModel().getId().equals(shapeModel.getId())){
+    			shapes.remove(shape);
+    			System.out.println("GOT IN REMOVE SHAPE");
+    		}
+    	}
+    	repaint();
+    }
+    
     public void removeShape(DShape shape) {
         shapes.remove(shape);
         int correctIndex = tablePosition.indexOf(shape);
         try {
             tableModel.removeRow(correctIndex); // remove from table model
         } catch (Exception e) {
-            System.out.println("shape arraylist index: " + correctIndex);
         }
         //remove shape from table position array!!
         tablePosition.remove(shape);

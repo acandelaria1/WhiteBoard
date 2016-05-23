@@ -1,8 +1,9 @@
 import java.awt.Color;
 import java.util.List;
+import java.util.UUID;
 
 public class DShapeModel {
-	
+	private String id;
 	private int x;
 	private int y;
 	private int width;
@@ -12,6 +13,7 @@ public class DShapeModel {
 	
 	// DShape Model Constructor
 	public DShapeModel(){
+		this.id = UUID.randomUUID().toString();
 		this.x = 0;
 		this.y = 0;
 		this.width = 0;
@@ -19,7 +21,9 @@ public class DShapeModel {
 		this.color = Color.GRAY;
 	}
 	
-		
+	public String getId(){
+		return this.id;
+	}
 	public int getX() {
 		return x;
 	}
